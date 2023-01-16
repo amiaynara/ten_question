@@ -1,0 +1,58 @@
+<html>
+<head>
+    <title>My Webpage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <style>
+        textarea {
+            height: 300px;
+            padding: 20;
+        }
+        .result-container {
+            display: block;
+        }
+        .container {
+            background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
+            height: 100vh; /* Set the container height to 100% of the viewport height */
+            width: 100%; /* Set the container width to 100% of the viewport width */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="POST" action="">
+            <label>What do you want to practice?</label>
+            <input type="text" name="practice"><br>
+            <label>What grade level?</label>
+            <input type="text" name="grade"><br><br>
+            <input type="submit" value="Submit">
+        </form>
+        {% if result %}
+            <div id="result-container">
+                {% for item in result %}
+                    <p>{{ item }}</p>
+                {% endfor %}
+            </div>
+            <button onclick="downloadPDF()">Download PDF</button>
+        {% else %}
+        {% endif %}
+    </div>
+    <script>
+        function downloadPDF() {
+            var pdf = new jsPDF();
+            var elementHTML = document.getElementById("result-container").innerHTML;
+            var specialElementHandlers = {
+                '#elementHTML': function (element, renderer) {
+                    return true;
+                }
+            };
+            pdf.fromHTML(elementHTML, 15, 15, {
+                'width': 170,
+                'elementHandlers': specialElementHandlers
+            });
+            pdf.save("result.pdf");
+        }
+    </script>
+</body>
+</html>
