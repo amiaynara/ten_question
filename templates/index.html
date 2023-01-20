@@ -22,6 +22,7 @@
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/select2/select2.min.css')}}">
 <!--===============================================================================================-->	
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='vendor/daterangepicker/daterangepicker.css')}}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
@@ -32,40 +33,47 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" method="POST" action="">
 					<span class="login100-form-title p-b-26">
 						What do you want to practice?
 					</span>
-					<span class="login100-form-title p-b-48">
-
-					</span>
-
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
-						<input class="input100" type="text" name="email">
+					<div class="wrap-input100 validate-input">
+						<input id="practice" class="input100" type="text" name="practice">
 						<span class="focus-input100" data-placeholder="eg: Addition, multiplication, etc."></span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate="Enter password">
+					<div class="wrap-input100 validate-input">
 						
-						<input class="input100" type="password" name="pass">
+						<input class="input100" id="grade" type="number" name="grade">
 						<span class="focus-input100" data-placeholder="What grade level? (K-12)"></span>
 					</div>
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button type="submit" class="login100-form-btn">
 								Submit
 							</button>
 						</div>
 					</div>
-
-					<div class="text-center p-t-115">
-						<span class="txt1">
-						</span>
-
-						<a class="txt2" href="#">
-						</a>
+					<br>
+					<hr>
+					<br>
+					<div>
+						{% if result %}
+							<div id="result-container">
+								<p><strong>The questions are:</strong></p>
+								<br>
+								{% for item in result %}
+									<p>{{ item }}</p>
+								{% endfor %}
+							</div>
+							<br>
+							<button type="button" class="btn btn-sm btn-primary" onclick="downloadPDF()">
+								Download PDF
+							</button>
+						{% else %}
+						{% endif %}
 					</div>
 				</form>
 			</div>
@@ -83,14 +91,25 @@
 	<script src=""{{url_for('static', filename='vendor/bootstrap/js/popper.js')}}"></script>
 	<script src=""{{url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 <!--===============================================================================================-->
-	<script src=""{{url_for('static', filename='vendor/select2/select2.min.js')}}"></script>
-<!--===============================================================================================-->
-	<script src=""{{url_for('static', filename='vendor/daterangepicker/moment.min.js')}}"></script>
-	<script src=""{{url_for('static', filename='vendor/daterangepicker/daterangepicker.js')}}"></script>
-<!--===============================================================================================-->
-	<script src=""{{url_for('static', filename='vendor/countdowntime/countdowntime.js')}}"></script>
-<!--===============================================================================================-->
-	<script src=""{{url_for('static', filename='js/main.js')}}"></script>
+
+<script>
+	function downloadPDF() {
+		var pdf = new jsPDF();
+		var elementHTML = document.getElementById("result-container").innerHTML;
+		var specialElementHandlers = {
+			'#elementHTML': function (element, renderer) {
+				return true;
+			}
+		};
+		pdf.fromHTML(elementHTML, 15, 15, {
+			'width': 170,
+			'elementHandlers': specialElementHandlers
+		});
+		pdf.save("result.pdf");
+	}
+</script>
+
+
 
 </body>
 </html>

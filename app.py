@@ -25,6 +25,7 @@ def create_math_problems(practice, grade):
 @app.route('/', methods=["GET", "POST"])
 def index():
     result = None
+    print('request was made<________', request.form)
     if request.method == "POST":
         practice = request.form['practice']
         grade = request.form['grade']
