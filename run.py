@@ -35,5 +35,29 @@ def index():
 
     return render_template("index.html", result=result)
 
+@app.route('/science', methods=["GET", "POST"])
+def science():
+    result = None
+    if request.method == "POST":
+        practice = request.form['practice']
+        grade = request.form['grade']
+        result = create_math_problems(practice, grade)
+        result = result.split("\n")
+        result = [item.replace(".", "\n") for item in result]
+
+    return render_template("index.html", result=result)
+
+@app.route('/maths', methods=["GET", "POST"])
+def maths():
+    result = None
+    if request.method == "POST":
+        practice = request.form['practice']
+        grade = request.form['grade']
+        result = create_math_problems(practice, grade)
+        result = result.split("\n")
+        result = [item.replace(".", "\n") for item in result]
+
+    return render_template("index.html", result=result)
+
 if __name__ == '__main__':
     app.run(debug=True)
